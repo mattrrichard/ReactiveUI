@@ -505,18 +505,18 @@ namespace ReactiveUI.Tests
         [Fact]
         public void InvokeCommandRespectsCanExecute()
         {
-            var executed = false;
+            var executionCount = 0;
             var canExecute = new BehaviorSubject<bool>(false);
-            var fixture = ReactiveCommand.Create(() => executed = true, canExecute);
+            var fixture = ReactiveCommand.Create(() => ++executionCount, canExecute);
             var source = new Subject<Unit>();
             source.InvokeCommand(fixture);
 
             source.OnNext(Unit.Default);
-            Assert.False(executed);
+            Assert.Equal(0, executionCount);
 
             canExecute.OnNext(true);
             source.OnNext(Unit.Default);
-            Assert.True(executed);
+            Assert.Equal(1, executionCount);
         }
     }
 
